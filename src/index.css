@@ -1145,33 +1145,158 @@ body {
 }
 
 /* ===== Responsive ===== */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .app {
-    padding: 0 12px;
+    padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom);
   }
 
+  /* Month Navigator */
+  .month-nav-title {
+    font-size: 1.15rem;
+  }
+  
+  .month-nav-arrow {
+    width: 36px;
+    height: 36px;
+  }
+
+  .month-pills {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; 
+    margin-top: 16px;
+  }
+  
+  .month-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .month-pill {
+    flex-shrink: 0;
+    padding: 8px 16px;
+  }
+
+  /* Summary Dashboard */
   .summary-main-card {
-    padding: 16px;
-    gap: 16px;
+    padding: 20px;
+    gap: 20px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .summary-main-right {
+    width: 100%;
+  }
+
+  .summary-stat {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  
+  .summary-stat:last-child {
+    border-bottom: none;
   }
 
   .summary-accounts {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
+  /* Controls Bar */
+  .controls-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin: 24px 0 16px;
+  }
+
+  .controls-right {
+    justify-content: space-between;
+  }
+
+  .filter-toggle {
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  .btn-add {
+    flex: 1;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .btn-reset {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Account Header */
+  .account-header {
+    padding: 16px;
+  }
+  
+  .account-total {
+    font-size: 0.95rem;
+  }
+
+  /* Payment Card Redesign for Mobile */
+  .payment-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .payment-card-left {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
+
+  .payment-card-center {
+    width: calc(100% - 40px); /* Leave room for checkbox */
+  }
+  
+  .payment-name {
+    font-size: 1.05rem;
+  }
+
+  .payment-card-right {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 12px;
+    margin-top: 4px;
+  }
+
+  .payment-amount {
+    font-size: 1.15rem;
+  }
+
+  .card-actions {
+    gap: 8px !important;
+  }
+
+  /* Always show action buttons on mobile, make them bigger for touch */
+  .edit-btn, .delete-btn {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Forms */
   .form-row {
     grid-template-columns: 1fr;
   }
-
-  .month-pills {
-    gap: 4px;
-  }
-
-  .month-pill {
-    padding: 6px 10px;
-  }
-
-  .controls-bar {
-    flex-wrap: wrap;
+  
+  .form-group input, .form-group select {
+    padding: 12px 14px; /* Larger touch targets */
   }
 }
