@@ -104,38 +104,39 @@ export default function PaymentCard({ payment, isPaid, completedCount, installme
       )}
 
       {showEdit && (
-        <div className="delete-confirm-overlay" onClick={() => setShowEdit(false)}>
-          <div className="delete-confirm-dialog" onClick={(e) => e.stopPropagation()}>
-            <p>Edit Paid EMIs for <strong>{payment.name}</strong></p>
-            <div style={{ margin: '15px 0' }}>
-              <input
-                type="number"
-                value={editCount}
-                onChange={(e) => setEditCount(e.target.value)}
-                min="0"
-                max={payment.totalInstallments}
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  borderRadius: '6px',
-                  background: 'var(--bg-card)',
-                  border: '1px solid var(--border-color)',
-                  color: 'white',
-                  fontSize: '1rem'
-                }}
-              />
+        <div className="modal-overlay" onClick={() => setShowEdit(false)}>
+          <div className="modal-content small" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header" style={{ marginBottom: '15px' }}>
+              <h3>Edit Paid EMIs</h3>
+              <button className="modal-close" onClick={() => setShowEdit(false)} aria-label="Close">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
             </div>
-            <div className="delete-confirm-actions">
-              <button className="btn-cancel" onClick={() => setShowEdit(false)}>Cancel</button>
+            
+            <div className="modal-form" style={{ textAlign: 'left' }}>
+              <div className="form-group">
+                <label>Paid Installments (Max: {payment.totalInstallments})</label>
+                <input
+                  type="number"
+                  value={editCount}
+                  onChange={(e) => setEditCount(e.target.value)}
+                  min="0"
+                  max={payment.totalInstallments}
+                  autoFocus
+                />
+              </div>
               <button
                 className="btn-primary"
                 onClick={() => {
                   onUpdatePaidCount(Number(editCount));
                   setShowEdit(false);
                 }}
-                style={{ padding: '8px 16px', background: 'var(--accent-color)' }}
+                style={{ marginTop: '5px' }}
               >
-                Save
+                Save Changes
               </button>
             </div>
           </div>
