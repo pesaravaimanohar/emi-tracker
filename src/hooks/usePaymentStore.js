@@ -82,16 +82,51 @@ function reducer(state, action) {
     }
 
     case 'ADD_PAYMENT': {
+      const { payment, alreadyPaid } = action;
       const newPayment = {
-        ...action.payment,
+        ...payment,
         id: `custom-${Date.now()}`,
       };
+
+      const newHistory = {};
+      if (!newPayment.isRecurring && newPayment.startDate && alreadyPaid > 0) {
+        const start = new Date(newPayment.startDate);
+        for (let i = 0; i < Math.min(alreadyPaid, newPayment.totalInstallments); i++) {
+          const d = new Date(start.getFullYear(), start.getMonth() + i, 1);
+          const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+          newHistory[key] = { paid: true };
+        }
+      }
+
       return {
         ...state,
         payments: [...state.payments, newPayment],
         history: {
           ...state.history,
-          [newPayment.id]: {},
+          [newPayment.id]: newHistory,
+        },
+      };
+    }
+
+    case 'UPDATE_PAID_COUNT': {
+      const { paymentId, newPaidCount } = action;
+      const payment = state.payments.find(p => p.id === paymentId);
+      if (!payment || payment.isRecurring || !payment.startDate) return state;
+
+      const newHistory = {};
+      const start = new Date(payment.startDate);
+      // Generate new history for the first newPaidCount months
+      for (let i = 0; i < Math.min(newPaidCount, payment.totalInstallments); i++) {
+        const d = new Date(start.getFullYear(), start.getMonth() + i, 1);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        newHistory[key] = { paid: true };
+      }
+
+      return {
+        ...state,
+        history: {
+          ...state.history,
+          [paymentId]: newHistory,
         },
       };
     }
@@ -177,8 +212,12 @@ export function usePaymentStore() {
     dispatch({ type: 'TOGGLE_SHOW_ALL' });
   }, []);
 
-  const addPayment = useCallback((payment) => {
-    dispatch({ type: 'ADD_PAYMENT', payment });
+  const addPayment = useCallback((payment, alreadyPaid = 0) => {
+    dispatch({ type: 'ADD_PAYMENT', payment, alreadyPaid });
+  }, []);
+
+  const updatePaidCount = useCallback((paymentId, newPaidCount) => {
+    dispatch({ type: 'UPDATE_PAID_COUNT', paymentId, newPaidCount });
   }, []);
 
   const deletePayment = useCallback((paymentId) => {
@@ -252,6 +291,7 @@ export function usePaymentStore() {
     setMonth,
     toggleShowAll,
     addPayment,
+    updatePaidCount,
     deletePayment,
     resetData,
   };

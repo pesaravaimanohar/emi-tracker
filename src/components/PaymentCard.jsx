@@ -1,7 +1,9 @@
 import { useState } from 'react';
 
-export default function PaymentCard({ payment, isPaid, completedCount, installmentNumber, onToggle, onDelete }) {
+export default function PaymentCard({ payment, isPaid, completedCount, installmentNumber, onToggle, onDelete, onUpdatePaidCount }) {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [editCount, setEditCount] = useState(completedCount);
   const progress = payment.isRecurring
     ? null
     : {
@@ -60,17 +62,33 @@ export default function PaymentCard({ payment, isPaid, completedCount, installme
           ₹{payment.monthlyAmount.toLocaleString('en-IN')}
         </span>
 
-        <button
-          className="delete-btn"
-          onClick={() => setShowConfirmDelete(true)}
-          aria-label={`Delete ${payment.name}`}
-          title="Delete"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="3 6 5 6 21 6" />
-            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-          </svg>
-        </button>
+        <div className="card-actions" style={{ display: 'flex', gap: '4px' }}>
+          {progress && (
+            <button
+              className="edit-btn"
+              onClick={() => { setEditCount(completedCount); setShowEdit(true); }}
+              aria-label={`Edit ${payment.name}`}
+              title="Edit Paid EMIs"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </button>
+          )}
+
+          <button
+            className="delete-btn"
+            onClick={() => setShowConfirmDelete(true)}
+            aria-label={`Delete ${payment.name}`}
+            title="Delete"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {showConfirmDelete && (
@@ -80,6 +98,45 @@ export default function PaymentCard({ payment, isPaid, completedCount, installme
             <div className="delete-confirm-actions">
               <button className="btn-cancel" onClick={() => setShowConfirmDelete(false)}>Cancel</button>
               <button className="btn-delete" onClick={onDelete}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showEdit && (
+        <div className="delete-confirm-overlay" onClick={() => setShowEdit(false)}>
+          <div className="delete-confirm-dialog" onClick={(e) => e.stopPropagation()}>
+            <p>Edit Paid EMIs for <strong>{payment.name}</strong></p>
+            <div style={{ margin: '15px 0' }}>
+              <input
+                type="number"
+                value={editCount}
+                onChange={(e) => setEditCount(e.target.value)}
+                min="0"
+                max={payment.totalInstallments}
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  borderRadius: '6px',
+                  background: 'var(--bg-card)',
+                  border: '1px solid var(--border-color)',
+                  color: 'white',
+                  fontSize: '1rem'
+                }}
+              />
+            </div>
+            <div className="delete-confirm-actions">
+              <button className="btn-cancel" onClick={() => setShowEdit(false)}>Cancel</button>
+              <button
+                className="btn-primary"
+                onClick={() => {
+                  onUpdatePaidCount(Number(editCount));
+                  setShowEdit(false);
+                }}
+                style={{ padding: '8px 16px', background: 'var(--accent-color)' }}
+              >
+                Save
+              </button>
             </div>
           </div>
         </div>

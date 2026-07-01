@@ -98,6 +98,7 @@ export default function App() {
           getInstallmentNumber={store.getInstallmentNumber}
           onToggle={store.togglePaid}
           onDelete={store.deletePayment}
+          onUpdatePaidCount={store.updatePaidCount}
           accentClass="accent-mom"
         />
 
@@ -111,6 +112,7 @@ export default function App() {
           getInstallmentNumber={store.getInstallmentNumber}
           onToggle={store.togglePaid}
           onDelete={store.deletePayment}
+          onUpdatePaidCount={store.updatePaidCount}
           accentClass="accent-my"
         />
       </main>

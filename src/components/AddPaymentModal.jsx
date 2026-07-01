@@ -8,6 +8,7 @@ export default function AddPaymentModal({ onAdd, onClose }) {
     totalInstallments: '',
     startDate: '',
     isRecurring: false,
+    alreadyPaid: '',
   });
 
   const handleSubmit = (e) => {
@@ -21,7 +22,7 @@ export default function AddPaymentModal({ onAdd, onClose }) {
       totalInstallments: form.isRecurring ? null : Number(form.totalInstallments) || null,
       startDate: form.isRecurring ? null : form.startDate || null,
       isRecurring: form.isRecurring,
-    });
+    }, form.isRecurring ? 0 : Number(form.alreadyPaid) || 0);
     onClose();
   };
 
@@ -116,6 +117,20 @@ export default function AddPaymentModal({ onAdd, onClose }) {
                   onChange={(e) => update('startDate', e.target.value)}
                 />
               </div>
+            </div>
+          )}
+
+          {!form.isRecurring && (
+            <div className="form-group">
+              <label htmlFor="payment-already-paid">Already Paid EMIs (Optional)</label>
+              <input
+                id="payment-already-paid"
+                type="number"
+                value={form.alreadyPaid}
+                onChange={(e) => update('alreadyPaid', e.target.value)}
+                placeholder="0"
+                min="0"
+              />
             </div>
           )}
 

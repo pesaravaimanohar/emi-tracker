@@ -11,6 +11,7 @@ export default function AccountSection({
   getInstallmentNumber,
   onToggle,
   onDelete,
+  onUpdatePaidCount,
   accentClass,
 }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -57,6 +58,7 @@ export default function AccountSection({
               installmentNumber={getInstallmentNumber(payment)}
               onToggle={() => onToggle(payment.id)}
               onDelete={() => onDelete(payment.id)}
+              onUpdatePaidCount={(newCount) => onUpdatePaidCount(payment.id, newCount)}
             />
           ))
         )}
