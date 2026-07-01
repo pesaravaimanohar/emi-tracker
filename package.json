@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "homepage": "https://<username>.github.io/emi-tracker/",
+  "homepage": "https://pesaravaimanohar.github.io/emi-tracker/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
